@@ -1,0 +1,131 @@
+html{
+    font-size: 20px;
+}
+
+body {
+    /* Native font stack https://getbootstrap.com/docs/4.2/content/reboot/#native-font-stack */
+    font-family: -apple-system, 'PingFang TC',BlinkMacSystemFont, 'Microsoft YaHei', 'Segoe UI', 'Roboto','Helvetica Neue', Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    color: black;
+    margin: 0;
+  }
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    color: black;
+}
+
+/* 左側 My Website 樣式 */
+.website-name {
+    font-weight: bold;
+    padding: 0px 20px;
+}
+
+/* 導航項目 */
+.nav-item {
+    margin-left: 5px;
+    text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
+    color: black;
+    padding: 10px;
+}
+
+.nav-item:hover {
+    text-decoration: underline;
+}
+
+header {
+    background-color: lightblue; /* 设置背景颜色为深灰色 */
+    color: Black; /* 设置文本颜色为白色 */
+    padding: 20px; /* 添加内边距 */
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+header h1{
+    font-size: 2rem;
+}
+
+main {
+    max-width: 1200px;
+    background-color: gray;
+    margin: 25px auto;
+}
+
+.smallbox {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.smallboxcontainer {
+    height: 50;
+    background-color: lightblue;
+    flex: 1 1 calc(33.33% - 60px); /* 平分宽度 */
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin: 0 10px 20px;
+    box-sizing: border-box;
+}
+
+.smallboxcontainer img {
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
+}
+
+.smallboxcontainer span {
+    height: 50px;
+    display:flex;
+    align-items: center;
+    align-self: flex-start; /* 在 flexbox 中向左对齐 */
+    padding-left: 10px; /* 添加左内边距，使文字离图片有一定距离 */
+}
+
+@media (min-width: 601px) and (max-width: 1200px) {
+    main{
+        max-width: 90%;
+    }
+    .smallboxcontainer {
+        height: 50;
+        background-color: lightblue;
+        flex: 1 1 calc(50% - 40px); /* 平分宽度 */
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0 10px 20px;
+        box-sizing: border-box;
+    }
+    .smallboxcontainer:nth-child(3) {
+        flex: 1 1 100%; /* 第三个元素宽度为100%，独占一行 */
+    }
+}
+
+@media (max-width: 600px){
+    main{
+        max-width: 90%;
+    }
+    .smallboxcontainer {
+        height: 50;
+        background-color: lightblue;
+        flex: 1 1 100%; /* 平分宽度 */
+        display: flex;
+        align-items: center;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0 10px 20px;
+        box-sizing: border-box;
+    }
+}
