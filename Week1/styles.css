@@ -62,17 +62,16 @@ main {
 .smallbox {
     display: flex;
     flex-wrap: wrap;
+    margin:0;
 }
 
 .smallboxcontainer {
-    height: 50;
+    height: 50px;
     background-color: lightblue;
-    flex: 1 1 calc(33.33% - 60px); /* 平分宽度 */
     display: flex;
-    align-items: center;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
+    flex: 1 1 calc((100% - 60px)/3); /* 平分宽度 */
+    align-items: center; /* 使得子元素 img 跟 text 都一樣*/
+    justify-content: flex-start; /* 在 flexbox 中向左对齐 */
     margin: 0 10px 20px;
     box-sizing: border-box;
 }
@@ -83,12 +82,107 @@ main {
     object-fit: cover;
 }
 
-.smallboxcontainer span {
-    height: 50px;
+.smallboxcontainer .text {
     display:flex;
-    align-items: center;
-    align-self: flex-start; /* 在 flexbox 中向左对齐 */
     padding-left: 10px; /* 添加左内边距，使文字离图片有一定距离 */
+}
+
+/*------------------開始處理bigbox-------------------*/
+
+.bigbox{
+    width:100%;
+    display: flex; /* 當display: flex, 預設： flex-direction: row; */
+    flex-wrap: wrap;
+    margin:0;
+    background-color: blue;
+}
+
+.bigboxcontainer {
+    max-width: 100%;
+    width:100%;
+    height: 250px;
+    display: flex;
+    flex: 1 1 calc((100% - 60px)/3); /*該項元素的伸縮變化平分 */
+    margin: 0 10px 20px;
+    box-sizing: border-box;
+    background-color: lightgreen;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.imggroup{
+    width:100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /*height:100%; 雖然可以*避免overlay-text, overlay-star溢出，但可能會讓圖形變形*/
+}
+
+.imggroup.left{ /*有空格就是之後的子元素*/
+    margin-right: 10px;
+}
+
+.imggroup.right{
+    margin-left: 10px;
+}
+
+img {
+    height: 250px;
+    width: auto;
+    max-width: 100%; 
+    /*2024.04.03修改處 因為要讓圖aspect ratio固定，auto: width會加大範圍*/
+    overflow: hidden; /*裁剪*/
+    object-fit: cover; /*等比例縮放 */
+}
+
+.overlay-text {
+    width:100%;
+    position: absolute;
+    background-color: rgba(205, 245, 170, 0.5); /* 可调整背景色及透明度 */
+    color:black;
+    padding: 10px; /* 添加一些内边距 */
+    margin: 0; /* 确保标题与容器底部对齐 */
+    font-size: 1rem;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.overlay-star {
+    position: absolute;
+    color: red; /* 设置星号的颜色 */
+    font-size: 1.2rem; /* 设置星号的大小 */
+    top: 5px;
+    right: 5px;
+}
+
+.bigboxinner {
+    height: 250px;
+    background-color: lightgreen;
+    display: flex;
+    flex: 1 1 calc((100% - 20px)/2); /*該項元素的伸縮變化平分 */
+    align-items: center; /* 使得子元素 img 跟 text 都一樣*/
+    margin: 0 0 20px;
+    box-sizing: border-box;
+}
+
+@media (min-width: 1201px) and (max-width: 1920px){
+    main{
+        max-width: 1200px;
+    }
+    .smallboxcontainer {
+        height: 50;
+        background-color: lightblue;
+        flex: 1 1 calc((100% - 60px)/3); /* 平分宽度 */
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0 10px 20px;
+        box-sizing: border-box;
+    }
 }
 
 @media (min-width: 601px) and (max-width: 1200px) {
@@ -100,7 +194,6 @@ main {
         background-color: lightblue;
         flex: 1 1 calc(50% - 40px); /* 平分宽度 */
         display: flex;
-        align-items: center;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
@@ -112,7 +205,7 @@ main {
     }
 }
 
-@media (max-width: 600px){
+@media (min-width: 361px) and (max-width: 600px){
     main{
         max-width: 90%;
     }
@@ -121,7 +214,6 @@ main {
         background-color: lightblue;
         flex: 1 1 100%; /* 平分宽度 */
         display: flex;
-        align-items: center;
         flex-direction: row;
         align-items: center;
         justify-content: flex-start;
