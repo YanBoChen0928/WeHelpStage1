@@ -437,6 +437,7 @@ main {
     }
     .nav-item {
         text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
+        text-align: center;
         color: black;
         padding: 20px 50px;
     }
