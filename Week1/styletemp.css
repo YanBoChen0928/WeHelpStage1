@@ -46,3 +46,30 @@
     }
 } 
 */
+
+
+
+function toggleMenu() {
+    var overlay = document.getElementById('overlay');
+    var menuContent = document.getElementById('menu-content');
+    
+    overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
+    menuContent.style.display = (menuContent.style.display === 'block') ? 'none' : 'block';
+  }
+
+
+/*複雜的寫法
+  function toggleMenu() {
+    var menuItems = document.querySelector('.menu-items');
+    var overlay = document.querySelector('.overlay');
+    menuItems.classList.toggle('active');
+    overlay.classList.toggle('active');
+  }
+  
+  function closeMenu() {
+    var menuItems = document.querySelector('.menu-items');
+    var overlay = document.querySelector('.overlay');
+    menuItems.classList.remove('active');
+    overlay.classList.remove('active');
+  }
+  */

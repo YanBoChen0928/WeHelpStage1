@@ -17,13 +17,38 @@ nav {
     background-color: white;
     color: black;
 }
+.burgermenuicon{
+    display:none;
+    cursor: pointer;
+}
+.burgermenuicon img{
+    width: 30px;
+    height: 30px;
+}
+.overlayclose{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 5px;
+    cursor: pointer;
+    padding: 10px;
+}
+.overlayclose img{
+    width: 20px;
+    height: 20px;
+}
 /* 左側 My Website 樣式 */
 .website-name {
     font-weight: bold;
     padding: 0px 20px;
 }
 /* 導航項目 */
+.menu{
+    display: flex; /*記得要有這個，因為包裹.nav-item */
+}
 .nav-item {
+    display: flex;
     margin-left: 5px;
     text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
     color: black;
@@ -49,7 +74,6 @@ header h1{
 /*main 開始*/
 main {
     max-width: 1200px;
-    background-color: gray;
     margin: 25px auto;
 }
 /*SB*/
@@ -387,5 +411,43 @@ main {
     .BB.item10 {
         grid-column: 1 / span 1; /* item5,10 在第6gridline，跨越1欄 */
         grid-row: 10;
+    }
+
+    .website-name {
+        font-weight: bold;
+        padding: 0px 20px;
+        height: 30px;
+    }
+    /* 導航項目 */
+    .menu{
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100vh; /* 设置 menu-content 的高度为100%屏幕高度 */
+        box-sizing: border-box;
+        background-color: #fff;
+        border: 0.5px solid darkgray;
+        border-left: 2px solid gray;
+        box-shadow: -5px 5px 10px rgba(87, 85, 85, 0.329); /* 阴影效果 */
+        z-index: 2;
+    }
+    .nav-item {
+        text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
+        color: black;
+        padding: 20px 50px;
+    }
+    .nav-item:hover {
+        text-decoration: underline;
+    }
+    .burgermenuicon{
+        display:flex;
+        z-index:1;
+    }
+    .overlayclose{
+        display:none;
+        z-index:3;
     }
 }

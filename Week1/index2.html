@@ -8,13 +8,20 @@
     <body>
         <nav>
             <div class="website-name">My Website</div> <!-- 左側文本 -->
-            <div>
-                <a href="#" class="nav-item">Item1</a> <!-- 右側项目1 -->
-                <a href="#" class="nav-item">Item2</a> <!-- 右側项目2 -->
-                <a href="#" class="nav-item">Item3</a> <!-- 右側项目3 -->
-                <a href="#" class="nav-item">Item4</a> <!-- 右側项目4 -->
+            <div class="menu">
+                <a href="#" class="nav-item">Item1</a> <!-- 右側項目1 -->
+                <a href="#" class="nav-item">Item2</a> <!-- 右側項目2 -->
+                <a href="#" class="nav-item">Item3</a> <!-- 右側項目3 -->
+                <a href="#" class="nav-item">Item4</a> <!-- 右側項目4 -->
+            </div>
+            <div class="burgermenuicon" onclick="toggleMenu()">
+                <img src ="burgermenu.png" alt="burgermenuicon">
             </div>
         </nav>
+<!--overlay x 的符號-->
+        <div class="overlayclose" onclick="toggleMenu()">
+            <img src ="close.png" alt="closemenuicon">
+        </div> 
         <header>
             <h1>Welcome to MyHome</h1>
         </header>
@@ -88,5 +95,14 @@
                 </div>
             </section>
         </main>
+        <script>
+            function toggleMenu() {
+                var menu = document.querySelector('.menu');
+                var close = document.querySelector('.overlayclose');
+    
+                menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+                close.style.display = (close.style.display === 'flex') ? 'none' : 'flex';
+            }
+        </script>
     </body>
 </html>
