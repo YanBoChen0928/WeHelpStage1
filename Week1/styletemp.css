@@ -1,0 +1,48 @@
+
+@media (min-width: 601px) and (max-width: 1200px) {
+    main{
+        max-width: 90%;
+    }
+    .SBcontainer{
+        max-width:100%; /*如果是設width:100%, 會往右跑出去一點*/
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        grid-template-rows: 50px 50px;
+        grid-gap: 20px;
+        box-sizing: border-box;
+        margin: 0 10px 20px 10px; /*可以簡寫：0 10px 20px*/
+    }
+    .SB.item1 {
+        grid-row: 1;
+        grid-column: 1/ span 2; /* item1 跨越1欄 */
+    }
+    
+    .SB.item2 {
+        grid-row: 1;
+        grid-column: 3 / span 2; /* item2 在第3欄，跨越2欄 */
+    }
+    
+    .SB.item3 {
+        grid-row: 2;
+        grid-column: 1 / span 4; /* item3 在第四欄，跨越1欄 */
+    }
+}
+
+
+@media (max-width: 600px){
+    main{
+        max-width: 90%;
+    }
+    .smallboxcontainer {
+        height: 50;
+        background-color: lightblue;
+        flex: 1 1 100%; 
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        margin: 0 10px 20px;
+        box-sizing: border-box;
+    }
+} 
+*/

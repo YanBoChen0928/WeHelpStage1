@@ -192,7 +192,7 @@ img {
     .smallboxcontainer {
         height: 50;
         background-color: lightblue;
-        flex: 1 1 calc(50% - 40px); /* 平分宽度 */
+        flex: 1 1 calc((100% - 40px)/2); /* 平分宽度 */
         display: flex;
         flex-direction: row;
         align-items: center;
