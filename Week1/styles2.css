@@ -49,6 +49,7 @@ nav {
 }
 .nav-item {
     display: flex;
+    justify-content:center;
     margin-left: 5px;
     text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
     color: black;
