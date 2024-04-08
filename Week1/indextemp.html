@@ -1,0 +1,108 @@
+<!DOCTYPE html5>
+<html lang ="en">
+    <head>
+        <meta charset ="utf-8">
+        <meta name ="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel ="stylesheet" href="styletemp.css">
+    </head>
+    <body>
+        <nav>
+            <div class="website-name">My Website</div> <!-- 左側文本 -->
+            <div class="menu">
+                <a href="#" class="nav-item">Item1</a> <!-- 右側項目1 -->
+                <a href="#" class="nav-item">Item2</a> <!-- 右側項目2 -->
+                <a href="#" class="nav-item">Item3</a> <!-- 右側項目3 -->
+                <a href="#" class="nav-item">Item4</a> <!-- 右側項目4 -->
+            </div>
+            <div class="burgermenuicon" onclick="toggleMenu()">
+                <img src ="burgermenu.png" alt="burgermenuicon">
+            </div>
+        </nav>
+<!--overlay x 的符號-->
+        <div class="overlayclose" onclick="toggleMenu()">
+            <img src ="close.png" alt="closemenuicon">
+        </div> 
+        <header>
+            <h1>Welcome to MyHome</h1>
+        </header>
+        <main>
+<!--smallbox*3-->
+            <section class="SBcontainer">
+                <div class="SB item1">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="text">Promotion1</div>
+                </div>
+                <div class="SB item2">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="text">Promotion2</div>
+                </div>
+                <div class="SB item3">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="text">Promotion3</div>
+                </div>
+            </section>
+<!--bigbox 開始-->
+            <section class="BBcontainer">
+                <div class="BB item1">
+                        <img src="Home.jpg" alt="Home Image">
+                        <div class="Text">Title 1</div>
+                        <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item2">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 2</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item3">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 3</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item4">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 4</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item5">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 5</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item6">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 6</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item7">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 7</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item8">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 8</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item9">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 9</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+                <div class="BB item10">
+                    <img src="Home.jpg" alt="Home Image">
+                    <div class="Text">Title 10</div>
+                    <div class="overlayStar">&#9733</div>
+                </div>
+            </section>
+        </main>
+        <script>
+            function toggleMenu() {
+                var menu = document.querySelector('.menu');
+                var close = document.querySelector('.overlayclose');
+    
+                menu.style.display = (menu.style.display === 'flex') ? 'none' : 'flex';
+                close.style.display = (close.style.display === 'flex') ? 'none' : 'flex';
+            }
+        </script>
+    </body>
+</html>

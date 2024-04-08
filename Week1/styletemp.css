@@ -1,15 +1,228 @@
+html{
+    font-size: 20px;
+}
+body {
+    /* Native font stack https://getbootstrap.com/docs/4.2/content/reboot/#native-font-stack */
+    font-family: -apple-system, 'PingFang TC',BlinkMacSystemFont, 'Microsoft YaHei', 'Segoe UI', 'Roboto','Helvetica Neue', Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    text-align: center;
+    color: black;
+    margin: 0;
+  }
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: white;
+    color: black;
+}
+.burgermenuicon{
+    display:none;
+    cursor: pointer;
+}
+.burgermenuicon img{
+    width: 30px;
+    height: 30px;
+}
+.overlayclose{
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    margin: 5px;
+    cursor: pointer;
+    padding: 10px;
+}
+.overlayclose img{
+    width: 20px;
+    height: 20px;
+}
+/* 左側 My Website 樣式 */
+.website-name {
+    font-weight: bold;
+    padding: 0px 20px;
+}
+/* 導航項目 */
+.menu{
+    display: flex; /*記得要有這個，因為包裹.nav-item */
+}
+.nav-item {
+    display: flex;
+    justify-content:center;
+    margin-left: 5px;
+    text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
+    color: black;
+    padding: 10px;
+}
+.nav-item:hover {
+    text-decoration: underline;
+}
+/*header*/
+header {
+    background-color: lightblue; /* 设置背景颜色为深灰色 */
+    color: Black; /* 设置文本颜色为白色 */
+    padding: 20px; /* 添加内边距 */
+    height: 250px;
+    display: flex;
+    justify-content: center; /*指定子元素:h1*/
+    align-items: center; /*指定子元素:h1*/
+    margin-bottom: 25px;
+}
+header h1{
+    font-size: 2rem;
+}
+/*main 開始*/
+main {
+    max-width: 1200px;
+    margin: 25px auto;
+}
+/*SB*/
+.SBcontainer{
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: 50px;
+    grid-gap: 20px;
+    margin: 0 10px 20px 10px; /*可以簡寫：0 10px 20px*/
+}
+
+.SB {
+    background-color: lightblue; /*要清楚target*/
+    margin: 0;
+    display:flex; /*在SBcontainer設定grid, 在子元素 SB 設定內部flex*/
+    align-items: center; /*因為只有一行，所以就用item即可*/
+}
+.SB.item1 {
+    grid-column: 1/ span 2; /* item1 跨越2欄 */
+}
+.SB.item2 {
+    grid-column: 3 / span 2; /* item2 在第3欄，跨越2欄 */
+}
+.SB.item3 {
+    grid-column: 5 / span 2; /* item3 在第5欄，跨越2欄 */
+}
+.SB img{
+    width: 80px;
+    height: 50px;
+    object-fit: cover;
+    /*display: flex; */
+    /*justify-content: flex-start; 在 flexbox 中向左對齊這行可以不寫 */
+    margin:0;
+}
+.SB .text{
+    padding-left: 10px; /* 添加左邊padding, 文字跟圖有點距離 */
+    box-sizing: border-box;
+}
+
+/*------------------開始處理bigbox-------------------*/
+
+.BBcontainer {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 250px);
+    grid-gap: 20px;
+    margin: 0 10px 20px 10px;
+}
+.BB {
+    background-color: blue; /*要清楚target*/
+    margin: 0;
+    display:flex; 
+ /*這樣才可以讓 text變橫的*/
+    /*在SBcontainer設定grid, 在子元素 SB 設定內部flex*/
+    /* 當display: flex, 預設： flex-direction: row; */
+    /*flex-wrap: wrap;?*/
+    position: relative; /*要做為基準，給子元素image,text,star定位*/
+}
+
+.BB.item1 {
+    grid-column: 1/ span 2; /* item1,6 跨越2欄 */
+    grid-row: 1;
+}
+
+.BB.item2 {
+    grid-column: 3 / span 1; /* item2,7 在第3gridline，跨越1欄 */
+    grid-row: 1;
+}
+
+.BB.item3 {
+    grid-column: 4 / span 1; /* item3,8 在第4gridline，跨越1欄 */
+    grid-row: 1;
+}
+
+.BB.item4 {
+    grid-column: 5 / span 1; /* item4,9 在第5gridline，跨越1欄 */
+    grid-row: 1;
+}
+
+.BB.item5 {
+    grid-column: 6 / span 1; /* item5,10 在第6gridline，跨越1欄 */
+    grid-row: 1;
+}
+
+.BB.item6 {
+    grid-column: 1/ span 2; /* item1,6 跨越2欄 */
+    grid-row: 2;
+}
+
+.BB.item7 {
+    grid-column: 3 / span 1; /* item2,7 在第3gridline，跨越1欄 */
+    grid-row: 2;
+}
+
+.BB.item8 {
+    grid-column: 4 / span 1; /* item3,8 在第4gridline，跨越1欄 */
+    grid-row: 2;
+}
+
+.BB.item9 {
+    grid-column: 5 / span 1; /* item4,9 在第5gridline，跨越1欄 */
+    grid-row: 2;
+}
+
+.BB.item10 {
+    grid-column: 6 / span 1; /* item5,10 在第6gridline，跨越1欄 */
+    grid-row: 2;
+}
+
+.BB img{ 
+    width:100%;
+    height:100%;
+    object-fit: cover;
+    /*overflow: hidden; 在grid中不用設定*/
+    display: flex;
+}
+
+.BB .Text{
+    width:100%;
+    position: absolute;
+    background-color: rgba(205, 245, 170, 0.5); /* 可调整背景色及透明度 */
+    color:black;
+    padding: 10px; /* 添加一些内边距 */
+    font-size: 1rem;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.BB .overlayStar{
+    position: absolute;
+    color: red; /* 设置星号的颜色 */
+    font-size: 1.2rem; /* 设置星号的大小 */
+    top: 5px;
+    right: 5px;
+}
 
 @media (min-width: 601px) and (max-width: 1200px) {
     main{
         max-width: 90%;
     }
     .SBcontainer{
-        max-width:100%; /*如果是設width:100%, 會往右跑出去一點*/
         display: grid;
         grid-template-columns: repeat(4,1fr);
-        grid-template-rows: 50px 50px;
+        grid-template-rows: repeat(2, 50px);
         grid-gap: 20px;
-        box-sizing: border-box;
         margin: 0 10px 20px 10px; /*可以簡寫：0 10px 20px*/
     }
     .SB.item1 {
@@ -24,38 +237,215 @@
     
     .SB.item3 {
         grid-row: 2;
-        grid-column: 1 / span 4; /* item3 在第四欄，跨越1欄 */
+        grid-column: 1 / span 4; /* item3 在第2欄，跨越4欄 */
+    }
+
+    .BBcontainer {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(3, 250px);
+        grid-gap: 20px;
+        margin: 0 10px 20px 10px;
+    }
+    .BB {
+        background-color: blue; /*要清楚target*/
+        margin: 0;
+        display:flex; 
+        flex-direction:column; /*這樣才可以讓 text變橫的*/
+        /*在SBcontainer設定grid, 在子元素 SB 設定內部flex*/
+        /* 當display: flex, 預設： flex-direction: row; */
+        /*flex-wrap: wrap;?*/
+        position: relative; /*要做為基準，給子元素image,text,star定位*/
+    }
+    
+    .BB.item1 {
+        grid-column: 1/ span 1; /* item1,6 跨越2欄 */
+        grid-row: 1;
+    }
+    
+    .BB.item2 {
+        grid-column: 2 / span 1; /* item2,7 在第3gridline，跨越1欄 */
+        grid-row: 1;
+    }
+    
+    .BB.item3 {
+        grid-column: 3 / span 1; /* item3,8 在第4gridline，跨越1欄 */
+        grid-row: 1;
+    }
+    
+    .BB.item4 {
+        grid-column: 4 / span 1; /* item4,9 在第5gridline，跨越1欄 */
+        grid-row: 1;
+    }
+    
+    .BB.item5 {
+        grid-column: 1 / span 1; /* item5,10 在第6gridline，跨越1欄 */
+        grid-row: 2;
+    }
+    
+    .BB.item6 {
+        grid-column: 2/ span 1; /* item1,6 跨越2欄 */
+        grid-row: 2;
+    }
+    
+    .BB.item7 {
+        grid-column: 3 / span 1; /* item2,7 在第3gridline，跨越1欄 */
+        grid-row: 2;
+    }
+    
+    .BB.item8 {
+        grid-column: 4 / span 1; /* item3,8 在第4gridline，跨越1欄 */
+        grid-row: 2;
+    }
+    
+    .BB.item9 {
+        grid-column: 1 / span 2; /* item4,9 在第5gridline，跨越1欄 */
+        grid-row: 3;
+    }
+    
+    .BB.item10 {
+        grid-column: 3 / span 2; /* item5,10 在第6gridline，跨越1欄 */
+        grid-row: 3;
     }
 }
 
 
-@media (max-width: 600px){
+@media (max-width: 600px) {
     main{
         max-width: 90%;
     }
-    .smallboxcontainer {
-        height: 50;
-        background-color: lightblue;
-        flex: 1 1 100%; 
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: flex-start;
-        margin: 0 10px 20px;
-        box-sizing: border-box;
+    .SBcontainer{
+        max-width:100%; /*如果是設width:100%, 會往右跑出去一點*/
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(3, 50px);
+        grid-gap: 20px;
+        margin: 0 10px 20px 10px; /*可以簡寫：0 10px 20px*/
     }
-} 
-*/
-
-
-
-function toggleMenu() {
-    var overlay = document.getElementById('overlay');
-    var menuContent = document.getElementById('menu-content');
+    .SB.item1 {
+        grid-row: 1;
+        grid-column: 1/ span 1; /* item1 跨越1欄 */
+    }
     
-    overlay.style.display = (overlay.style.display === 'block') ? 'none' : 'block';
-    menuContent.style.display = (menuContent.style.display === 'block') ? 'none' : 'block';
-  }
+    .SB.item2 {
+        grid-row: 2;
+        grid-column: 1 / span 1; /* item2 在第3欄，跨越2欄 */
+    }
+    
+    .SB.item3 {
+        grid-row: 3;
+        grid-column: 1 / span 1; /* item3 在第四欄，跨越1欄 */
+    }
+
+    .BBcontainer {
+        max-width:100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: repeat(10, 250px);
+        grid-gap: 20px;
+        margin: 0 10px 20px 10px;
+    }
+    .BB {
+        background-color: blue; /*要清楚target*/
+        margin: 0;
+        display:flex; 
+        flex-direction:column; /*這樣才可以讓 text變橫的*/
+        /*在SBcontainer設定grid, 在子元素 SB 設定內部flex*/
+        /* 當display: flex, 預設： flex-direction: row; */
+        /*flex-wrap: wrap;?*/
+        position: relative; /*要做為基準，給子元素image,text,star定位*/
+    }
+    
+    .BB.item1 {
+        grid-column: 1 / span 1;
+        grid-row: 1;
+    }
+    
+    .BB.item2 {
+        grid-column: 1 / span 1; /* item2,7 在第3gridline，跨越1欄 */
+        grid-row: 2;
+    }
+    
+    .BB.item3 {
+        grid-column: 1 / span 1; /* item3,8 在第4gridline，跨越1欄 */
+        grid-row: 3;
+    }
+    
+    .BB.item4 {
+        grid-column: 1 / span 1; /* item4,9 在第5gridline，跨越1欄 */
+        grid-row: 4;
+    }
+    
+    .BB.item5 {
+        grid-column: 1 / span 1; /* item5,10 在第6gridline，跨越1欄 */
+        grid-row: 5;
+    }
+    
+    .BB.item6 {
+        grid-column: 1/ span 1; /* item1,6 跨越2欄 */
+        grid-row: 6;
+    }
+    
+    .BB.item7 {
+        grid-column: 1 / span 1; /* item2,7 在第3gridline，跨越1欄 */
+        grid-row: 7;
+    }
+    
+    .BB.item8 {
+        grid-column: 1 / span 1; /* item3,8 在第4gridline，跨越1欄 */
+        grid-row: 8;
+    }
+    
+    .BB.item9 {
+        grid-column: 1 / span 1; /* item4,9 在第5gridline，跨越1欄 */
+        grid-row: 9;
+    }
+    
+    .BB.item10 {
+        grid-column: 1 / span 1; /* item5,10 在第6gridline，跨越1欄 */
+        grid-row: 10;
+    }
+/*
+    .website-name {
+        font-weight: bold;
+        padding: 0px 20px;
+        height: 30px;
+    } 因為本來同行的menu設定 position: fixed; 顯現後也就不影響了
+*/
+    /* 導航項目 */
+    .menu{
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 50%;
+        height: 100vh; /* 设置 menu-content 的高度为100%屏幕高度 */
+        box-sizing: border-box;
+        background-color: #fff;
+        border: 0.5px solid darkgray;
+        border-left: 2px solid gray;
+        box-shadow: -5px 5px 10px rgba(87, 85, 85, 0.329); /* 陰影效果 */
+        z-index: 2;
+    }
+    .nav-item {
+        text-decoration: none; /*本來用 a href="#" 會有這個部分，挪去*/
+        text-align: center;
+        color: black;
+        padding: 20px 50px;
+    }
+    .nav-item:hover {
+        text-decoration: underline;
+    }
+    .burgermenuicon{
+        display:flex;
+        z-index:1;
+    }
+    .overlayclose{
+        display:none;
+        z-index:3;
+    }
+}
 
 
 /*複雜的寫法
