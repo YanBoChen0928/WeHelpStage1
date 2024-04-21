@@ -1,5 +1,3 @@
-import json
-import csv
 
 # 解析第一個 JSON 檔案
 
@@ -59,27 +57,26 @@ for item1 in url1_results:
             grouped_data[mrt] = []
         grouped_data[mrt].append(item1["stitle"])
 
-
-# 將組織好的資料輸出到 CSV 檔案中
-with open('mrt.csv', 'w', newline='', encoding='utf-8') as csvfile:
-    fieldnames = ['MRT', 'stitle']
-    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    
-    for MRT, stitles in grouped_data.items():
-        writer.writerow({'MRT': MRT, 'stitle': ','.join(stitles)})
-
-
-#建立 spot.csv，優先處理 district的問題
+#1-1 建立 spot.csv，優先處理 district的問題
 #用正則表達式去對比 Serial No. 取區
 
-serial_to_district = {item["SERIAL_NO"]: re.search(r"(\S{2}區)", item["address"]).group(1) for item in url2_results}
+# 創建字典以存儲從 serial no. 到 district 的映射
+
+serial_to_district = {}
+
+for item2 in url2_results:
+    # 使用正則表達式找到「區」之前的兩個字
+    match = re.search(r'(.{2})區', item2["address"])
+    if match:
+        district = match.group(1) + "區"
+        serial_to_district[item2["SERIAL_NO"]] = district
 
 rows = []
 for item in url1_results: 
     #資料型態 {"data":{"limit":1000 ,"offset":0,"count":58,"sort":"","results":[{"info":"新北投）
     #表示取 my_data 是字典，取 ['data']key 中 ['results']key的value值
     spot_title = item.get('stitle', '')
-    district = serial_to_district.get(item1["SERIAL_NO"], "")
+    district = serial_to_district.get(item["SERIAL_NO"], "")
     longitude = item.get('longitude', '')
     latitude = item.get('latitude', '')
     image_urls = item.get('filelist', '').split('https://')  # 根據URL的分隔符進行分割
@@ -87,9 +84,26 @@ for item in url1_results:
     rows.append([spot_title, district, longitude, latitude, image_url])
 #print(rows)
 
-# 3 write
+#write1-1
 if __name__ == "__main__":
     with open('spot.csv', 'w', encoding='utf-8', newline=None) as file: #newline ="", None 有不同意思
         writer = csv.writer(file)
         #writer.writerow(['SpotTitle', 'District', 'Longitude', 'Latitude', 'ImageURL'])  # adding name row by row
         writer.writerows(rows)
+
+
+
+# 1-2 將組織好的資料輸出到 CSV 檔案中
+if __name__ == "__main__":
+    with open('mrt.csv', 'w', newline='', encoding='utf-8') as csvfile:
+        max_stitle_count = max(len(stitles) for stitles in grouped_data.values())  # 获取最大的 stitle 数量
+        fieldnames = ['MRT'] + [f'stitle_{i}' for i in range(1, max_stitle_count + 1)]  # 生成字段名称
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        
+        for MRT, stitles in grouped_data.items():
+            # create new dictionary
+            row_data = {'MRT': MRT}
+            # write into new column
+            for i, stitle in enumerate(stitles, start=1):
+                row_data[f'stitle_{i}'] = stitle
+            writer.writerow(row_data)
