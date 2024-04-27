@@ -1,0 +1,72 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <!-- <link rel="stylesheet" href="{{static_css}}, 這樣的寫法，就要在main.py給static_css value"> -->
+</head>
+<body>
+    <header>
+        <div>歡迎光臨，請輸入帳號密碼</div>
+    </header>
+    <div class="container">
+        <div class="title">登入系統</div>
+        <form id="login-form" action="/signin" method="post">
+            <div class="form-group">
+                <label for="username">帳號</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="form-group">
+                <label class="informed_consent">同意條款</label>
+                <input type="checkbox" id="checkbox" name="checkbox"> 
+            </div>
+            <div class="form-group">
+                <button class="signin" type="submit">登入</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- 警示窗格 -->
+    <div id="alert" class="alert-container">
+        <div class="alert-containerposition">
+            <p id="alert-message" class="alert-message">
+                <strong><span id="host"></span> says<br></strong>
+                Please check the checkbox first
+            </p>
+            <button id="alert-btn" class="alert-btn">OK</button>
+        </div>
+    </div>
+
+    <script>
+         // 在警示窗格中動態設置主機地址
+        document.getElementById('host').textContent = window.location.host;
+        
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            if (!document.getElementById('checkbox').checked) {
+                // 彈出警示窗
+                let alertDiv = document.getElementById('alert');
+                let okButton = document.getElementById('alert-btn');
+
+                alertDiv.style.display = 'block';
+
+                // 阻止表單的預設提交行為
+                event.preventDefault();
+            }
+        });
+
+        // OK 按鈕關閉警示窗
+        document.getElementById('alert-btn').addEventListener('click', function() {
+            let alertDiv = document.getElementById('alert');
+            alertDiv.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
