@@ -1,0 +1,22 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success Page</title>
+    <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <!-- <link rel="stylesheet" href="{{static_css}}, 這樣的寫法，就要在main.py給static_css value"> -->
+</head>
+<body>
+    <header>
+        <div>歡迎光臨，這是會員頁</div>
+    </header>
+    <div class="container">
+        <div class="title">恭喜您，成功登入系統</div>
+        <!-- 登出系統的連結 -->
+        <div><a href="/signout">登出系統</a></div>
+    </div>
+</body>
+</html>
