@@ -20,9 +20,6 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 #設置Jinja2 模板目錄
 templates = Jinja2Templates(directory="templates")
 
-#HTTPBasic 身份認證 (5/11 一定要用嗎？跟session擇一)
-#security = HTTPBasic()
-
 # 啟用 SessionMiddleware
 app.add_middleware(SessionMiddleware, secret_key="your_secret_key")
 
@@ -32,7 +29,6 @@ USER_STATE_KEY = "SIGNED-IN"
 # 驗證成功時設置用戶狀態為已登錄
 def set_user_signed_in(request: Request):
     request.session[USER_STATE_KEY] = True # key: value 
-    # 將登入的用戶名稱存入 session  (可以做)
 
 # 登出時設置用戶狀態為未登錄
 def set_user_signed_out(request: Request):
@@ -48,14 +44,13 @@ async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request, "home_url": request.url_for('home')})
 
 #中間層 
-# endpoint: signup  5/11 
 @app.post("/signup", response_class=HTMLResponse)
 async def signup(request: Request):
     #需要用 await （表示完成這一個動作，才能做後續的, form.get()內是"name")
     form = await request.form()
     # 先建立這個，後面判斷username有沒有重複
     signup_username = form.get("signup_username") 
-    # 連接到 MySQL資料庫，username: wehelp (5/11 new) 
+    # 調用MySQL 資料庫 
     with mysql.connector.connect(
         host="localhost",
         user="wehelp",
@@ -79,10 +74,10 @@ async def signup(request: Request):
                 cursor.execute("INSERT INTO `member` (name, username, password) VALUES (%s, %s, %s)", (signup_name, signup_username, signup_password))
                 conn.commit()
 
-                # 在寫入新用戶到資料庫後，將用戶名設置到 session 中
+                # 在寫入新用戶到資料庫後，將name, username設置到 session 中
                 request.session["user"] = signup_name
                 request.session["username"] = signup_username
-                #print("User signed up:", request.session["user"]) 檢測用，確定有寫入session
+                #print("User signed up:", request.session["user"]) 檢測用，確定有寫入session, OK
 
                 # 重定向用戶到首頁
                 return RedirectResponse(f"/?success=True&name={signup_name}", status_code=303)
@@ -94,7 +89,7 @@ async def signin_post(request:Request,
     
     # 連線到 MySQL 資料庫
     with mysql.connector.connect(host="localhost", user="wehelp", password="wehelp", database="website") as conn:
-        with conn.cursor() as cursor:
+        with conn.cursor() as cursor: #有待整理的 code
             try:
                 # 使用 AND 來比對
                 cursor.execute("SELECT username, password, name FROM `member` WHERE (username = %s AND password = %s)", (username, password))
@@ -103,17 +98,19 @@ async def signin_post(request:Request,
                 #print("User from database:", user)  # 在這裡打印用戶信息
 
                 if user: # 如果用戶存在
-                    name = user[2]  # 獲取用戶名稱
+                    name = user[2]  # 獲取用戶名稱(tuple--> 應該可以用dictionary來處理)
                     print("from signin:", name)
                     # 登入成功，重定向到 /member 頁面，帶上用戶名作為查詢參數
                     set_user_signed_in(request) #本來的session
                     #print(name)
                     # 將用戶名稱存入 session
                     request.session["user"] = name 
+                    request.session["username"] = username
                     return RedirectResponse(url=f"/member?name={name}", status_code=303) 
                 else:  # 如果用戶名或密碼不正確，重定向到錯誤頁面，並顯示消息
                     return RedirectResponse(url="/error?message=帳號、密碼輸入錯誤")
             except Exception as e:
+                print("MySQL signin Error:", e)
                 # 處理異常
                 raise HTTPException(status_code=500)
 
@@ -128,7 +125,7 @@ async def error(request: Request, message: str = ""):
 
 #success 登入頁面member
 @app.get("/member", response_class=HTMLResponse, dependencies=[Depends(check_user_signed_in)])
-async def member(request: Request, name: str = None, new_message: str = Form(None)): 
+async def member(request: Request, new_message: str = Form(None)): 
     #檢查是否已經登入
     signed_in = request.session.get(USER_STATE_KEY, False)
     if not signed_in:
@@ -142,14 +139,16 @@ async def member(request: Request, name: str = None, new_message: str = Form(Non
         password="wehelp",
         database="website"
     ) as conn:
-        # 執行 SQL 查詢，使用 JOIN 操作獲取留言資料與作者名稱 (用dictionary)
+        # 執行 SQL 查詢，使用 JOIN 操作獲取留言資料與作者名稱 (用dictionary, 以後應該都要用這個處理^^, 因為mysql-connector轉換出來都是tuple)
         with conn.cursor(dictionary=True) as cursor:
             cursor.execute("SELECT message.content AS message, member.name AS name FROM message JOIN `member` ON message.member_id = member.id")
 
             # 檢索查詢結果
             messages = cursor.fetchall()
+            print(messages)
 
     # 重新render會員頁面模板，給出留言資料（messages, name)
+    name = request.session.get("user")
     return templates.TemplateResponse("member.html", {"request": request, "messages": messages, "name":name, "new_messages":new_message})
 
 # 創建新留言 week6 新增
@@ -201,4 +200,4 @@ async def signout(request: Request):
     
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8080)
