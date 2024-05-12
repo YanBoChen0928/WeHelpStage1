@@ -31,7 +31,8 @@ USER_STATE_KEY = "SIGNED-IN"
 
 # 驗證成功時設置用戶狀態為已登錄
 def set_user_signed_in(request: Request):
-    request.session[USER_STATE_KEY] = True # key: value
+    request.session[USER_STATE_KEY] = True # key: value 
+    # 將登入的用戶名稱存入 session  (可以做)
 
 # 登出時設置用戶狀態為未登錄
 def set_user_signed_out(request: Request):
@@ -78,17 +79,18 @@ async def signup(request: Request):
                 cursor.execute("INSERT INTO `member` (name, username, password) VALUES (%s, %s, %s)", (signup_name, signup_username, signup_password))
                 conn.commit()
 
+                # 在寫入新用戶到資料庫後，將用戶名設置到 session 中
+                request.session["user"] = signup_name
+                request.session["username"] = signup_username
+                #print("User signed up:", request.session["user"]) 檢測用，確定有寫入session
+
                 # 重定向用戶到首頁
                 return RedirectResponse(f"/?success=True&name={signup_name}", status_code=303)
 
 @app.post("/signin") 
-async def signin_post(request:Request,
-                      #credentials: HTTPBasicCredentials = Depends(security), 
+async def signin_post(request:Request, 
                       username: str = Form(None), 
-                      password: str = Form(None)):
-    # 從HTTPBasicCredentials 獲取username and password
-    #username = credentials.username
-    #password = credentials.password
+                      password: str = Form(None)): #從表單來的資料，要放 Form()
     
     # 連線到 MySQL 資料庫
     with mysql.connector.connect(host="localhost", user="wehelp", password="wehelp", database="website") as conn:
@@ -98,12 +100,16 @@ async def signin_post(request:Request,
                 cursor.execute("SELECT username, password, name FROM `member` WHERE (username = %s AND password = %s)", (username, password))
                 #cursor.execute("SELECT username, password, name FROM `member` WHERE (username, password) IN (%s, %s), (username, password))
                 user = cursor.fetchone() # 獲取一行結果
-                print("User from database:", user)  # 在這裡打印用戶信息
+                #print("User from database:", user)  # 在這裡打印用戶信息
 
                 if user: # 如果用戶存在
                     name = user[2]  # 獲取用戶名稱
+                    print("from signin:", name)
                     # 登入成功，重定向到 /member 頁面，帶上用戶名作為查詢參數
                     set_user_signed_in(request) #本來的session
+                    #print(name)
+                    # 將用戶名稱存入 session
+                    request.session["user"] = name 
                     return RedirectResponse(url=f"/member?name={name}", status_code=303) 
                 else:  # 如果用戶名或密碼不正確，重定向到錯誤頁面，並顯示消息
                     return RedirectResponse(url="/error?message=帳號、密碼輸入錯誤")
@@ -122,13 +128,13 @@ async def error(request: Request, message: str = ""):
 
 #success 登入頁面member
 @app.get("/member", response_class=HTMLResponse, dependencies=[Depends(check_user_signed_in)])
-async def member(request: Request, name: str = None): 
+async def member(request: Request, name: str = None, new_message: str = Form(None)): 
     #檢查是否已經登入
     signed_in = request.session.get(USER_STATE_KEY, False)
     if not signed_in:
         # 如果未登錄，重定向到首頁
         return RedirectResponse(url="/", status_code=303)
-    
+
     # 建立與 MySQL 資料庫的連線
     with mysql.connector.connect(
         host="localhost",
@@ -136,15 +142,54 @@ async def member(request: Request, name: str = None):
         password="wehelp",
         database="website"
     ) as conn:
-        # 執行 SQL 查詢，使用 JOIN 操作獲取留言資料與作者名稱
+        # 執行 SQL 查詢，使用 JOIN 操作獲取留言資料與作者名稱 (用dictionary)
         with conn.cursor(dictionary=True) as cursor:
             cursor.execute("SELECT message.content AS message, member.name AS name FROM message JOIN `member` ON message.member_id = member.id")
 
             # 檢索查詢結果
             messages = cursor.fetchall()
 
-    # 返回會員頁面模板，傳遞留言資料
-    return templates.TemplateResponse("member.html", {"request": request, "messages": messages, "name":name})
+    # 重新render會員頁面模板，給出留言資料（messages, name)
+    return templates.TemplateResponse("member.html", {"request": request, "messages": messages, "name":name, "new_messages":new_message})
+
+# 創建新留言 week6 新增
+@app.post("/createMessage")
+async def create_message(request: Request, new_message: str =Form(None)):
+
+    #檢查是否已經登入
+    signed_in = request.session.get(USER_STATE_KEY, False)
+    if not signed_in:
+        return RedirectResponse(url="/", status_code=303)
+    
+    # 獲取用戶名稱 name
+    name = request.session.get("user")
+    print("from createMessage:", name )
+    # 獲取用戶名稱 username
+    username = request.session.get("username")
+    print("from createMessage:",username)
+
+    try:
+        # 連接到資料庫
+        with mysql.connector.connect(host="localhost", user="wehelp", password="wehelp", database="website") as conn:
+            # 查找用戶的 member_id
+            with conn.cursor() as cursor:
+                cursor.execute("SELECT id FROM `member` WHERE username = %s", (username,))
+                result = cursor.fetchone()
+                if result:
+                    member_id = result[0]
+                else:
+                    # 如果找不到對應的用戶名，拋出異常
+                    raise HTTPException(status_code=404, detail="Hi, I got you!! User not found")
+
+            # 插入新留言到 message table 中
+            with conn.cursor() as cursor:
+                cursor.execute("INSERT INTO message (member_id, content) VALUES (%s, %s)", (member_id, new_message))
+                conn.commit()
+    except mysql.connector.Error as e:
+        print("MySQL Error:", e)
+    # 返回會員頁面
+    return RedirectResponse(url=f"/member?name={name}", status_code=303)
+    
 
 # 登出端點
 @app.get("/signout")

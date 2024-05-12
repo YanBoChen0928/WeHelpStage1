@@ -24,7 +24,7 @@
         <form action="/createMessage" method="post">
             <div style="display: flex; align-items: center; margin-bottom: 10px;">
                 <label for="new_message">內容</label>
-                <textarea id="new_message" name="new_message" rows="1" cols="30"></textarea>
+                <textarea id="new_message" name="new_message" rows="1" cols="30" required></textarea>
             </div>
             <button type="submit">送出</button>
         </form>
@@ -32,7 +32,7 @@
     <!-- week6 新加的舊留言顯示 對應 main.py @app.get('/member')-->
     <div class="container">
         <ul>
-            {% for msg in messages %}
+            {% for msg in messages[::-1] %}
             <li><strong>{{ msg.name }} :</strong> {{ msg.message }}</li>
             {% endfor %}
         </ul>
