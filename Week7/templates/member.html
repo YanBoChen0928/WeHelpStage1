@@ -1,0 +1,156 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success Page</title>
+    <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <!-- <link rel="stylesheet" href="{{static_css}}, 這樣的寫法，就要在main.py給static_css value"> -->
+</head>
+<body>
+    <header>
+        <div>歡迎光臨，這是會員頁</div>
+    </header>
+    <div class="container">
+        <div class="title" id="welcomeMessage">{{name}}，<br>歡迎登入系統</div>
+        <!-- 登出系統的連結 -->
+        <div><a href="/signout">登出系統</a></div>
+    </div>
+
+    <!-- week7 增加的查詢名字name系統 -->
+    <div class="container">
+        <div class="title">查詢會員姓名</div>
+        <div id="queryForm" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <input type="text" id="username" name="username" style="margin-left: 30px;">
+            <button type="button" id="queryButton">查詢</button> 
+            <!-- 這裡button type 不用submit是我想試試看不用Form傳送 -->
+        </div>
+        <div id="queryResult"></div> 
+    </div>
+
+    <!-- week7 增加改名系統 -->
+    <div class="container">
+        <div class="title">更新我的姓名</div>
+        <div id="updateNamebox" style="display: flex; align-items: center; margin-bottom: 10px;">
+            <input type="text" id="updateName" name="updateName" style="margin-left: 30px;" placeholder="請輸入新的姓名" required>
+            <button type="button" id="updateButton">更新</button> 
+        </div>
+        <!-- 用於顯示更新結果的 div -->
+        <div id="updateResult"></div> 
+    </div>
+
+    <div class="container">
+        <div class="title">快來留言吧</div>
+        <form action="/createMessage" method="post">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <label for="new_message">內容</label>
+                <textarea id="new_message" name="new_message" rows="1" cols="30" required></textarea>
+            </div>
+            <button type="submit">送出</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <ul>
+            {% for msg in messages[::-1] %}
+            <li><strong>{{ msg.name }} :</strong> {{ msg.message }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    <script> 
+        document.getElementById('queryButton').addEventListener('click', function() {
+            const username = document.getElementById('username').value;
+    
+            fetch(`/api/member?username=${encodeURIComponent(username)}`, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // 其實這邊data是從 Query Member API 傳回來的，所以如果 main.py 以下code:
+                // db_cursor.execute("SELECT name, username FROM `member` WHERE username = %s", (username,))
+                // memberName = db_cursor.fetchone()  # 獲取第一條匹配的結果
+                // print("SELECT from MYSQL:")
+                //print(memberName)
+                //if memberName:
+                // # 將結果手動轉換為字典
+                // member_data = {
+                    // "name": memberName[0],
+                    // "username": memberName[1]
+                // }
+                // print(member_data)
+                // return {"data": member_data}  # 返回會員資料的字典 
+                // 沒有問題，那就自然沒有問題
+            
+                const resultDiv = document.getElementById('queryResult');
+
+                if (data.data !== null) {
+                        // 若有匹配到會員，顯示名字和用戶名
+                        resultDiv.innerHTML = `<p>${data.data.name} (${data.data.username})</p>`;
+                } else {
+                        // 若沒有匹配到會員，顯示 No Data
+                        resultDiv.innerHTML = '<p>No Data</p>';
+                }
+            })
+            .catch(error => {
+                console.error('There was a problem with the fetch operation:', error);
+            });
+        });
+    </script>
+
+    <!-- week7 改名 Name update API-->
+    <script>
+            const newNameInput = document.getElementById('updateName');
+            const updateButton = document.getElementById('updateButton');
+
+            updateButton.addEventListener('click', () => {
+                const newName = newNameInput.value;
+                if (!newName) {
+                    alert("Username field cannot be empty");
+                    return; 
+                    }
+
+                fetch('/api/member', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: newName }) // 將新的會員名字轉換為 JSON 字串並放在請求體中
+                })
+                .then(response => {
+                    // 檢查回應的狀態碼，如果是 200 表示成功，否則拋出一個錯誤
+                    if (!response.ok) {
+                        throw new Error('Failed to Update');
+                    }
+                    return response.json(); // 確保回應是 json格式
+                })
+                .then(data => {
+                    // 處理回應中的資料
+                    const resultDiv = document.getElementById('updateResult');
+                    console.log(resultDiv)
+
+                    if (data.data !== null) {
+                        // 若有處理成功
+                        resultDiv.innerHTML = `<p>更新成功</p>`;
+                        console.log("Update Success:", data);
+                        const welcomeMessage = document.getElementById('welcomeMessage');
+                        welcomeMessage.textContent = `${newName}，\n歡迎登入系統`;
+                    } else {
+                        // 若沒有成功
+                        resultDiv.innerHTML = '<p>更新失敗</p>';
+                }
+                    console.log(data); // 這裡可以根據回應的資料來進行相應的處理
+                })
+                .catch(error => {
+                    // 捕獲並處理任何錯誤
+                    console.error('There was a problem with the fetch patch operation:', error);
+                });
+            });
+    </script>
+</body>
+</html>

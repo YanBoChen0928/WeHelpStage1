@@ -1,0 +1,122 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <!-- <link rel="stylesheet" href="/static/style.css"> -->
+    <link rel="stylesheet" href="{{ url_for('static', path='style.css') }}">
+    <!-- <link rel="stylesheet" href="{{static_css}}, 這樣的寫法，就要在main.py給static_css value"> -->
+</head>
+<body>
+    <header>
+        <div>歡迎光臨，請註冊登入系統</div>
+    </header>
+    <div class="container">
+        <div class="title">註冊帳號</div>
+        <form id="signup_form" action="/signup" method="post">
+            <div class="form_group">
+                <label for="signup_name">姓名</label>
+                <input type="text" id="signup_name" name="signup_name">
+            </div>
+            <div class="form_group">
+                <label for="signup_username">帳號</label>
+                <input type="text" id="signup_username" name="signup_username">
+            </div>
+            <div class="form_group">
+                <label for="signup_password">密碼</label>
+                <input type="password" id="signup_password" name="signup_password">
+            </div>
+            <div class="form_group">
+                <button class="submit" type="submit">註冊</button>
+            </div>
+            <div id="signupError" style="color: red; display: none;">請填寫完整註冊表單！</div>
+            <!-- 增加註冊成功的訊息 -->
+            {% if request.query_params.success == "True" %}
+            <p style="color: red">恭喜 {{ request.query_params.name }} 註冊成功！</p>
+            {% endif %}
+        </form>
+        <!-- 一開始寫的時候少了上面這個 </form> -->
+        <!-- login form -->
+        <div class="title">登入系統</div>
+        <form id="login_form" action="/signin" method="post">
+            <div class="form_group">
+                <label for="username">帳號</label>
+                <input type="text" id="username" name="username">
+            </div>
+            <div class="form_group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" name="password">
+            </div>
+            <div class="form_group">
+                <button class="submit" type="submit">登入</button>
+            </div>
+            <div id="loginError" style="color: red; display: none;">請填寫完整登入表單！</div>
+        </form>
+    </div>
+
+    <!-- 警示窗格 
+    <div id="alert" class="alert-container">
+        <div class="alert-containerposition">
+            <p id="alert-message" class="alert-message">
+                <strong><span id="host"></span> says<br></strong>
+                Please check the checkbox first
+            </p>
+            <button id="alert-btn" class="alert-btn">OK</button>
+        </div>
+    </div>
+
+
+    <script>
+         // 在警示窗格中動態設置主機地址
+        document.getElementById('host').textContent = window.location.host;
+        
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            if (!document.getElementById('checkbox').checked) {
+                // 彈出警示窗
+                let alertDiv = document.getElementById('alert');
+                let okButton = document.getElementById('alert-btn');
+
+                alertDiv.style.display = 'block';
+
+                // 阻止表單的預設提交行為
+                event.preventDefault();
+            }
+        });
+
+        // OK 按鈕關閉警示窗
+        document.getElementById('alert-btn').addEventListener('click', function() {
+            let alertDiv = document.getElementById('alert');
+            alertDiv.style.display = 'none';
+        });
+    </script>
+    -->
+    <script>// 處理不同表單的必填項目問題
+        document.getElementById("signup_form").addEventListener("submit", function(event) {
+        let name = document.getElementById("signup_name").value;
+        let username = document.getElementById("signup_username").value;
+        let password = document.getElementById("signup_password").value;
+
+            if (!name || !username || !password) { //如果name, username, password 有一為空，!就是true
+                event.preventDefault(); // 阻止表單送出
+                document.getElementById("signupError").style.display = "block";
+            } else {
+            document.getElementById("signupError").style.display = "none"; // 隱藏錯誤訊息
+            }
+         });
+
+        document.getElementById("login_form").addEventListener("submit", function(event) {
+        let username = document.getElementById("username").value;
+        let password = document.getElementById("password").value;
+
+            if (!username || !password) {
+            event.preventDefault(); // 阻止表單送出
+            document.getElementById("loginError").style.display = "block";
+            }  else {
+            document.getElementById("loginError").style.display = "none"; // 隱藏錯誤訊息
+            }
+        });
+    </script>
+</body>
+</html>
