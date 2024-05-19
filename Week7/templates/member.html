@@ -134,10 +134,10 @@
                     const resultDiv = document.getElementById('updateResult');
                     console.log(resultDiv)
 
-                    if (data.data !== null) {
+                    if (data.ok) {
                         // 若有處理成功
                         resultDiv.innerHTML = `<p>更新成功</p>`;
-                        console.log("Update Success:", data);
+                        //console.log("Update Success:", data);
                         const welcomeMessage = document.getElementById('welcomeMessage');
                         welcomeMessage.textContent = `${newName}，\n歡迎登入系統`;
                     } else {

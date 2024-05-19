@@ -183,15 +183,16 @@ async def get_member(request: Request, username: str = None): #因為只有簡�
         # 使用 cursor 執行 SQL 查詢
         with db_connection.cursor() as db_cursor:
             # 使用 SQL 查詢條件來選擇會員
-            db_cursor.execute("SELECT name, username FROM `member` WHERE username = %s", (username,))
+            db_cursor.execute("SELECT id, name, username FROM `member` WHERE username = %s", (username,))
             memberName = db_cursor.fetchone()  # 獲取第一條匹配的結果
             print("SELECT from MYSQL:")
             print(memberName)
             if memberName:
                 # 將結果手動轉換為字典（這邊因為配合python3.9安裝的mysql-connector-python沒有支援 dict內建函式，所以手動處理）
                 member_data = {
-                    "name": memberName[0],
-                    "username": memberName[1]
+                    "id": memberName[0],
+                    "name": memberName[1],
+                    "username": memberName[2]
                 }
                 print(member_data)
                 return {"data": member_data}  # 返回會員資料的字典
@@ -207,13 +208,13 @@ async def update_name(request: Request,  data: dict): #!!!!
     print(name)
 
     if name is None or name.strip() == "":
-        return {"error": "name is empty"}
+        return {"error": True}
     
     signed_in = request.session.get(USER_STATE_KEY, False)
 
     if not signed_in:
-        return {"data": None} 
-    
+        return {"error": True} 
+    print(signed_in)
     #這次沒有傳 username, 從session抓取
     username = request.session.get('username') #記得「' '」
     
@@ -223,21 +224,24 @@ async def update_name(request: Request,  data: dict): #!!!!
                 # 使用 SQL 查詢條件來update會員
                 db_cursor.execute("UPDATE `member` SET name = %s WHERE username = %s", (name, username))
                 db_connection.commit() 
-                # 要取出印出更新後的 member_data, 回傳member.html更新{{ name }}
+                # 要取出印出更新後的 member_data, 回傳member.html更新{{ name }} 其實採用實際執行的方式，在前端修改就好
                 db_cursor.execute("SELECT name FROM `member` WHERE username = %s", (username,))
-                updated_row = db_cursor.fetchone()
+                updated_row = db_cursor.fetchone() #如果上沒有select出來，這邊就會變成 None
+                '''
                 print("Update from MYSQL:") # 确认这里有输出
                 print(updated_row)
-
+                '''
                 if updated_row:
+                    '''
                     # 將結果手動轉換為字典
                     member_data = {
                         "name": updated_row[0],
                     }
                     print(member_data)
-                    return {"data": member_data}  # 返回會員資料的字典
+                    '''
+                    return {"ok": True}  # 返回會員資料的字典
                 else:
-                    return {"data": None}  # 若沒有匹配到會員，返回 null
+                    return {"error": True}  # 若沒有匹配到會員，返回 null
     except mysql.connector.Error as e:
         print("MySQL Error when doing fetch_patch:", e)
 
